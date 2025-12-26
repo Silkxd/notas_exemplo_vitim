@@ -1,12 +1,14 @@
 :root {
   --bg-color: #0f172a;
   --card-bg: #1e293b;
+  --sidebar-bg: #111827;
+  /* Darker for contrast */
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --accent-color: #38bdf8;
-  /* Sky Blue */
   --accent-hover: #0ea5e9;
   --modal-bg: rgba(15, 23, 42, 0.85);
+  --sidebar-width: 280px;
 }
 
 body {
@@ -14,15 +16,18 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-primary);
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 #root {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  /* Critical: Side-by-side layout */
   height: 100vh;
-  padding: 2rem;
+  width: 100vw;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 button {
@@ -32,19 +37,169 @@ button {
   transition: all 0.2s;
 }
 
+/* Sidebar Styles - Modern & Intuitive */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.sidebar-header {
+  margin-bottom: 2rem;
+}
+
+.sidebar-header h2 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.btn-create-folder {
+  width: 100%;
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--accent-color);
+  border: 1px dashed rgba(56, 189, 248, 0.3);
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  transition: all 0.2s;
+}
+
+.btn-create-folder:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+.new-folder-form input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.new-folder-form input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.folder-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Scrollbar sleekness */
+.folder-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.folder-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.folder-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.folder-list li {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.folder-list li:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  padding-left: 1.2rem;
+  /* Nice subtle slide effect */
+}
+
+.folder-list li.active {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.15) 0%, transparent 100%);
+  color: var(--accent-color);
+  font-weight: 600;
+  border-left: 3px solid var(--accent-color);
+  border-radius: 0 8px 8px 0;
+  /* Flat left edge */
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-logout {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  padding: 0.8rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+/* Main Content Area */
+.app-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  /* More breathing room */
+  overflow-y: auto;
+  position: relative;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
 /* Header & Controls */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
 h1 {
-  font-size: 2.5rem;
-  font-weight: 300;
+  font-size: 2.2rem;
+  font-weight: 700;
   letter-spacing: -1px;
-  background: linear-gradient(to right, #38bdf8, #818cf8);
+  background: linear-gradient(to right, #e2e8f0, #94a3b8);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -55,90 +210,76 @@ h1 {
   background-color: var(--accent-color);
   color: #0f172a;
   padding: 0.8rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 99px;
+  /* Pill shape */
   font-weight: 600;
-  font-size: 1rem;
-  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+  font-size: 0.95rem;
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .new-note-btn:hover {
   background-color: var(--accent-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4);
 }
 
 /* Note Grid */
 .notes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
   padding-bottom: 2rem;
 }
 
 /* Note Card */
 .note-card {
   background-color: var(--card-bg);
-  padding: 1.5rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.8rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  height: 150px;
+  height: 180px;
   overflow: hidden;
   position: relative;
 }
 
 .note-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  border-color: rgba(56, 189, 248, 0.3);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+  border-color: rgba(56, 189, 248, 0.2);
+  background-color: #243045;
+  /* Slightly lighter on hover */
 }
 
 .note-card h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.25rem;
+  margin: 0 0 0.8rem 0;
+  font-size: 1.3rem;
   font-weight: 600;
   color: var(--text-primary);
+  line-height: 1.3;
 }
 
-.note-card p {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  /* Description hidden/truncated effectively by overflow */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  opacity: 0.7;
-}
-
-/* Hidden description hint (user said description only seen on click, 
-   but title is always seen. I'll show a sneak peek or just hide it fully if required?
-   "a descrição só será vista ao clicar no card".
-   Okay, I will hide the description fully in the card view, or just show a "Click to view" hint.
-   I'll hide it to strictly follow instructions: "cada note será um card e que cada card tem seu título e descriçao (a descrição só será vista ao clicar no card)"
-   Wait, if description is part of the card but only seen on click? Maybe the card layout changes?
-   Or maybe it's just the Title on the card, and click opens it?
-   "cada card tem seu título e descriçao (a descrição só será vista ao clicar no card)" -> imply visual hidden.
-*/
 .note-card .description-preview {
   display: none;
-  /* As per strict instructions */
 }
 
 .note-card .click-hint {
   margin-top: auto;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--accent-color);
   opacity: 0;
-  transition: opacity 0.2s;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  font-weight: 500;
 }
 
 .note-card:hover .click-hint {
   opacity: 1;
+  transform: translateY(0);
 }
 
 /* Modal / Popup */
@@ -148,8 +289,9 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--modal-bg);
-  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.8);
+  /* Darker backdrop */
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -159,13 +301,13 @@ h1 {
 }
 
 .modal-content {
-  background-color: var(--card-bg);
+  background-color: #1e293b;
   width: 90%;
-  max-width: 600px;
-  padding: 2rem;
-  border-radius: 16px;
+  max-width: 700px;
+  padding: 3rem;
+  border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7);
   transform: scale(0.95);
   animation: popIn 0.3s forwards;
   display: flex;
@@ -173,51 +315,64 @@ h1 {
   gap: 1.5rem;
 }
 
-.modal-content input,
-.modal-content textarea {
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 1rem;
-  color: var(--text-primary);
-  font-size: 1rem;
-  font-family: inherit;
-  resize: none;
-  transition: border-color 0.2s;
+.modal-content input[type="text"] {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  padding: 1rem 0;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
-.modal-content input:focus,
-.modal-content textarea:focus {
-  outline: none;
+.modal-content input[type="text"]:focus {
   border-color: var(--accent-color);
 }
 
+.modal-content select {
+  align-self: flex-start;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+}
+
 .modal-content textarea {
-  min-height: 200px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  min-height: 300px;
+}
+
+.modal-content textarea:focus {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 .btn-save {
   background-color: var(--accent-color);
   color: #0f172a;
-  padding: 0.8rem 2rem;
-  border-radius: 8px;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
   font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .btn-close {
   background-color: transparent;
   color: var(--text-secondary);
-  padding: 0.8rem 1rem;
-}
-
-.btn-close:hover {
-  color: var(--text-primary);
+  padding: 1rem 2rem;
+  font-weight: 500;
 }
 
 @keyframes fadeIn {
